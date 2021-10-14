@@ -17,7 +17,7 @@ export default {
     ShowMovieList,
   },
   created() {
-    document.title = "Does Rover Die?";
+    document.title = "Does Rover Live?";
   },
 };
 </script>

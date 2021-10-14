@@ -29,8 +29,8 @@
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="
-                h-20
-                w-20
+                h-14
+                w-14
                 mr-2
                 inline
                 text-yellow-400
@@ -48,8 +48,8 @@
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="
-                h-20
-                w-20
+                h-14
+                w-14
                 ml-2
                 inline
                 text-yellow-400
