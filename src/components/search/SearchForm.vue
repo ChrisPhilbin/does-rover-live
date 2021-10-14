@@ -1,9 +1,20 @@
 <template>
   <div class="grid grid-cols-1 ml-auto mr-auto">
-    <div>
+    <div
+      class="
+        relative
+        h-96
+        bg-search-background bg-no-repeat bg-cover bg-opacity-60 bg-fixed
+      "
+    >
+      <p class="mt-8 font-title font-bold text-pink-400 text-6xl tracking-wide">
+        Does Rover Live?
+      </p>
+
       <form @submit.prevent="getMovies">
         <input
           type="text"
+          name="movieTitle"
           v-model="movieTitle"
           placeholder="enter movie title"
           class="
@@ -13,7 +24,7 @@
             py-2
             px-3
             text-gray-800
-            mt-6
+            mt-12
             ml-auto
             mr-auto
           "
@@ -33,21 +44,12 @@
             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
           />
         </svg>
-        <!-- <button
-          class="
-            bg-green-400
-            ring-4 ring-green-100
-            text-white
-            rounded
-            p-2
-            ml-3
-            max-w-min
-          "
-          @click="getMovies"
-        >
-          Search
-        </button> -->
       </form>
+      <div class="pt-10">
+        <p class="font-title text-white text-2xl">
+          Crowd sourced info to let you know if your favorite dog makes it.
+        </p>
+      </div>
     </div>
   </div>
 </template>

@@ -17,7 +17,8 @@ export default {
     ShowMovieList,
   },
   created() {
-    document.title = "Does Rover Live?";
+    document.title =
+      "Does Rover Live? - Crowd sourced data to find out if the dog lives in the movie";
   },
 };
 </script>

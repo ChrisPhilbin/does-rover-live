@@ -4,20 +4,22 @@ export default createStore({
   state: {
     loadingMovies: false,
     movieDetails: {},
+    loadedMovies: false,
     movieTitles: [],
-    errors: false,
+    errors: true,
   },
   mutations: {
     loadingMovies: (state) => {
       state.loadingMovies = !state.loadingMovies;
     },
+    setLoadedMovies: (state) => {
+      state.loadedMovies = !state.loadedMovies;
+    },
     setMovies: (state, movies) => {
       state.movieTitles = movies;
-      console.log(state.movieTitles);
     },
     setMovieDetails: (state, movieDetails) => {
       state.movieDetails = movieDetails;
-      console.log(state.movieDetails, "movie details");
     },
     hasErrors: (state) => {
       state.errors = true;
@@ -32,8 +34,42 @@ export default createStore({
         );
         let data = await response.json();
         if (response.ok) {
+          let promises = [];
+          data.results.forEach((result) => {
+            promises.push(
+              `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${result.id}`
+            );
+          });
+          await Promise.all(
+            promises.map(async (url) => {
+              const response = await fetch(url);
+              const responseData = await response.json();
+              return responseData;
+            })
+          );
+          //merge response data from firebase to response data from movieDB
+          // let movie = data.results.filter((obj) => {
+          //   console.log(obj);
+          //   return obj.id === responseData.movieId;
+          // });
+          // movie.dogLives = responseData.dogLives;
+          // movie.dogDies = responseData.dogDies;
+          //   })
+          // );
+          // data.results.forEach((m) => {
+          //   console.log(m, "m value");
+          //   let i = resp.findIndex((r) => {
+          //     console.log(r, "r value");
+          //     m.id === r.movieId;
+          //   });
+          //   console.log(i, "index value");
+          //   data.results[i].dogLives = r.dogLives;
+          //   data.results[i].dogDies = r.dogDies;
+          // });
+          // console.log(data.results);
           commit("setMovies", data.results);
           commit("loadingMovies");
+          commit("setLoadedMovies");
         }
       } catch (error) {
         commit("hasErrors");

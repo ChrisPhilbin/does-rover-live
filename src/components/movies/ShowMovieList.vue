@@ -1,5 +1,19 @@
 <template>
   <div
+    v-if="loadedMovies && !movieTitles.length"
+    class="
+      grid grid-cols-1
+      lg:grid-cols-3
+      justify-items-center
+      ml-auto
+      mr-auto
+      pt-4
+      max-w-5xl
+    "
+  >
+    <p class="text-red-500 font-bold">No results found!</p>
+  </div>
+  <div
     v-if="movieTitles.length"
     class="
       grid grid-cols-1
@@ -19,12 +33,10 @@
     >
       <div class="flex items-center justify-center">
         <div class="z-10">
-          <a :href="`/movies/${movie.id}`">
-            <img
-              :src="`https://www.themoviedb.org/t/p/w220_and_h330_face${movie.poster_path}`"
-              class="rounded-md mb-2 opacity-80 h-auto w-full"
-            />
-          </a>
+          <img
+            :src="`https://www.themoviedb.org/t/p/w220_and_h330_face${movie.poster_path}`"
+            class="rounded-md mb-2 opacity-80 h-auto w-full"
+          />
           <div class="text-center">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -117,6 +129,8 @@ export default {
   computed: {
     ...mapState({
       movieTitles: "movieTitles",
+      hasErrors: "hasErrors",
+      loadedMovies: "loadedMovies",
     }),
   },
 };
