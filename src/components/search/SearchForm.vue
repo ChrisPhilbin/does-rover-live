@@ -3,11 +3,12 @@
     <div
       class="
         relative
-        h-96
+        h-2xl
+        xs:h-full
         bg-search-background bg-no-repeat bg-cover bg-opacity-60 bg-fixed
       "
     >
-      <p class="mt-8 font-title font-bold text-pink-400 text-6xl tracking-wide">
+      <p class="mt-8 font-title font-bold text-white text-6xl tracking-wide">
         Does Rover Live?
       </p>
 
