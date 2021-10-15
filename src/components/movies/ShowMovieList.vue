@@ -38,6 +38,19 @@
             class="rounded-md mb-2 opacity-80 h-auto w-full"
           />
           <div class="text-center">
+            <span
+              v-if="movie.dogLives > movie.dogDies"
+              class="block uppercase text-green-600 font-bold"
+              >The dog Lives!</span
+            >
+            <span
+              v-else-if="movie.dogLives < movie.dogDies"
+              class="block uppercase text-red-500 font-bold"
+              >The dog doesn't make it</span
+            >
+            <span v-else class="block uppercase text-gray-600 font-bold"
+              >Not enough data</span
+            >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               class="

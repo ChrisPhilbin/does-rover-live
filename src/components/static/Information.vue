@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!loadedMovies"
+    v-if="!movieTitles.length"
     class="
       grid grid-cols-1
       lg:grid-cols-3
@@ -86,6 +86,7 @@ export default {
   computed: {
     ...mapState({
       loadedMovies: "loadedMovies",
+      movieTitles: "movieTitles",
     }),
   },
 };

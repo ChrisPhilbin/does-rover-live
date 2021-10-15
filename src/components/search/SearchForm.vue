@@ -46,6 +46,9 @@
           />
         </svg>
       </form>
+      <div v-if="loadingMovies">
+        <p class="text-white font-bold text-xl">Getting movies...</p>
+      </div>
       <div class="pt-10">
         <p class="font-title text-white text-2xl">
           Crowd sourced info to let you know if your favorite dog makes it.
@@ -69,6 +72,7 @@ export default {
   computed: {
     ...mapState({
       movieTitles: "movieTitles",
+      loadingMovies: "loadingMovies",
     }),
   },
   methods: {
