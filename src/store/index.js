@@ -34,19 +34,28 @@ export default createStore({
         );
         let data = await response.json();
         if (response.ok) {
-          let promises = [];
-          data.results.forEach((result) => {
-            promises.push(
-              `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${result.id}`
-            );
-          });
-          await Promise.all(
-            promises.map(async (url) => {
-              const response = await fetch(url);
-              const responseData = await response.json();
-              return responseData;
-            })
-          );
+          // let promises = [];
+          // data.results.forEach((result) => {
+          //   promises.push(
+          //     `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${result.id}`
+          //   );
+          // });
+          // let dogData = await Promise.all(
+          //   promises.map(async (url) => {
+          //     const response = await fetch(url);
+          //     const responseData = await response.json();
+          //     return responseData;
+          //   })
+          // );
+          // dogData.map((d) => {
+          //   let movieIndex = data.results.findIndex((movie) => {
+          //     movie.id == d.movieId;
+          //   });
+          //   console.log(movieIndex, "movie index value");
+          //   data.results[movieIndex].dogLives = d.dogLives;
+          //   data.results[movieIndex].dogDies = d.dogDies;
+          // });
+          // console.log(data.results);
           //merge response data from firebase to response data from movieDB
           // let movie = data.results.filter((obj) => {
           //   console.log(obj);
