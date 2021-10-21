@@ -1,5 +1,6 @@
 <template>
   <div
+    id="movieList"
     v-if="loadedMovies && !movieTitles.length"
     class="
       grid grid-cols-1
@@ -145,6 +146,13 @@ export default {
       hasErrors: "hasErrors",
       loadedMovies: "loadedMovies",
     }),
+  },
+  mounted() {
+    // setTimeout(() => {
+    //   document
+    //     .getElementById("movieList")
+    //     .scrollIntoView({ behavior: "smooth" });
+    // }, 2000);
   },
 };
 </script>
