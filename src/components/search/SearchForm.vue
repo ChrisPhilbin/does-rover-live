@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="getMovies" class="sticky top-0">
+  <form @submit.prevent="getMovies">
     <input
       type="text"
       name="movieTitle"

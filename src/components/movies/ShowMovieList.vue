@@ -148,11 +148,7 @@ export default {
     }),
   },
   mounted() {
-    // setTimeout(() => {
-    //   document
-    //     .getElementById("movieList")
-    //     .scrollIntoView({ behavior: "smooth" });
-    // }, 2000);
+    document.getElementById("movieList").scrollIntoView({ behavior: "smooth" });
   },
 };
 </script>
