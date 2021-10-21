@@ -29,4 +29,10 @@ exports.findOrCreateMovie = async (request, response) => {
 exports.incrementVoteCount = async (request, response) => {
   const document = db.collection("movies").doc(`${request.params.movieId}`);
   console.log(document);
+  if (request.body.vote) {
+    //increment lives count by one
+  } else {
+    //increment dies count by one
+  }
+  //save document back to DB and send response with updated counts
 };

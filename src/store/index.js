@@ -6,6 +6,7 @@ export default createStore({
     movieDetails: {},
     loadedMovies: false,
     movieTitles: [],
+    movieTitle: "",
     errors: true,
   },
   mutations: {
@@ -21,6 +22,9 @@ export default createStore({
     setMovieDetails: (state, movieDetails) => {
       state.movieDetails = movieDetails;
     },
+    setMovieTitle: (state, movieTitle) => {
+      state.movieTitle = movieTitle;
+    },
     hasErrors: (state) => {
       state.errors = true;
     },
@@ -28,6 +32,7 @@ export default createStore({
   actions: {
     async fetchMovies({ commit }, movieTitle) {
       commit("loadingMovies");
+      commit("setMovieTitle", movieTitle);
       try {
         let response = await fetch(
           `https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_MOVIE_API}&language=en-US&query=${movieTitle}&page=1&include_adult=false`
