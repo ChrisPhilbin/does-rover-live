@@ -10,14 +10,15 @@
       pt-4
       max-w-5xl
     "
-    id="movieList"
   >
-    <span id="movieList" class="hidden"></span>
     <p class="text-red-500 font-bold">No results found!</p>
   </div>
   <div
     v-if="movieTitles.length"
+    id="movieList"
+    ref="movies"
     class="
+      min-h-screen
       grid grid-cols-1
       lg:grid-cols-3
       justify-items-center
@@ -147,6 +148,10 @@ export default {
       hasErrors: "hasErrors",
       loadedMovies: "loadedMovies",
     }),
+  },
+  updated() {
+    const el = document.getElementById("movieList");
+    el.scrollIntoView({ behavior: "smooth" });
   },
 };
 </script>

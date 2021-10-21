@@ -13,12 +13,23 @@
         Does Rover Live?
       </p>
       <SearchForm />
-      <div v-if="loadingMovies">
-        <p class="text-white font-bold text-xl">Getting movies...</p>
+      <div v-if="loadingMovies" class="h-auto flex justify-center items-center">
+        <div
+          class="
+            animate-spin
+            rounded-full
+            h-32
+            w-32
+            border-t-2 border-b-2 border-purple-500
+          "
+        ></div>
       </div>
-      <div class="pt-10">
+      <!-- <div v-if="loadingMovies">
+        <p class="text-white font-bold text-xl">Getting movies...</p>
+      </div> -->
+      <div class="mt-16">
         <p class="font-title text-white text-2xl">
-          Crowd sourced info to let you know if your favorite dog makes it.
+          Find out or let others know if the dog in the movie makes it.
         </p>
       </div>
     </div>

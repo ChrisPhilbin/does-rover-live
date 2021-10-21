@@ -25,3 +25,8 @@ exports.findOrCreateMovie = async (request, response) => {
     return response.status(200).json(movieData);
   });
 };
+
+exports.incrementVoteCount = async (request, response) => {
+  const document = db.collection("movies").doc(`${request.params.movieId}`);
+  console.log(document);
+};
