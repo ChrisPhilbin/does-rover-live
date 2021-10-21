@@ -14,7 +14,7 @@
     <p class="text-red-500 font-bold">No results found!</p>
   </div>
   <div
-    v-if="movieTitles.length"
+    v-if="loadedMovies && movieTitles.length"
     id="movieList"
     ref="movies"
     class="
@@ -157,8 +157,10 @@ export default {
     }),
   },
   updated() {
-    const el = document.getElementById("movieList");
-    el.scrollIntoView({ behavior: "smooth" });
+    if (this.loadedMovies) {
+      const el = document.getElementById("movieList");
+      el.scrollIntoView({ behavior: "smooth" });
+    }
   },
 };
 </script>

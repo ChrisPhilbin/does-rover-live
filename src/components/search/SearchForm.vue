@@ -3,10 +3,13 @@
     <input
       type="text"
       name="movieTitle"
+      autofocus
       v-model="movieTitle"
       placeholder="enter movie title"
+      size="30"
       class="
-        shadow
+        focus:outline-none
+        shadow-lg
         border
         rounded-lg
         py-2

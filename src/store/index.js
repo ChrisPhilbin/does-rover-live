@@ -34,6 +34,7 @@ export default createStore({
       commit("loadingMovies");
       if (this.state.loadedMovies) {
         console.log(this.state.loadedMovies, "loadedMovies from vuex");
+        commit("setMovies", []);
         commit("setLoadedMovies");
       }
       commit("setMovieTitle", movieTitle);
