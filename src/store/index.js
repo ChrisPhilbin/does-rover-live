@@ -32,6 +32,10 @@ export default createStore({
   actions: {
     async fetchMovies({ commit }, movieTitle) {
       commit("loadingMovies");
+      if (this.state.loadedMovies) {
+        console.log(this.state.loadedMovies, "loadedMovies from vuex");
+        commit("setLoadedMovies");
+      }
       commit("setMovieTitle", movieTitle);
       try {
         let response = await fetch(

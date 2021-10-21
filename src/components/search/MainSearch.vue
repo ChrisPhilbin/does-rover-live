@@ -13,20 +13,15 @@
         Does Rover Live?
       </p>
       <SearchForm />
-      <div v-if="loadingMovies" class="h-auto flex justify-center items-center">
-        <div
-          class="
-            animate-spin
-            rounded-full
-            h-32
-            w-32
-            border-t-2 border-b-2 border-purple-500
-          "
-        ></div>
+      <div
+        v-if="loadedMovies && movieTitles.length === 0"
+        class="mt-3 bg-red-400 rounded-md p-4 w-48 opacity-80 ml-auto mr-auto"
+      >
+        <p class="font-bold text-white font-sans">No results found</p>
       </div>
-      <!-- <div v-if="loadingMovies">
+      <div v-if="loadingMovies">
         <p class="text-white font-bold text-xl">Getting movies...</p>
-      </div> -->
+      </div>
       <div class="mt-16">
         <p class="font-title text-white text-2xl">
           Find out or let others know if the dog in the movie makes it.
@@ -50,6 +45,7 @@ export default {
     ...mapState({
       loadingMovies: "loadingMovies",
       movieTitles: "movieTitles",
+      loadedMovies: "loadedMovies",
     }),
   },
   methods: {},
