@@ -1,6 +1,5 @@
 <template>
   <div
-    id="movieList"
     v-if="loadedMovies && !movieTitles.length"
     class="
       grid grid-cols-1
@@ -11,7 +10,9 @@
       pt-4
       max-w-5xl
     "
+    id="movieList"
   >
+    <span id="movieList" class="hidden"></span>
     <p class="text-red-500 font-bold">No results found!</p>
   </div>
   <div
@@ -146,9 +147,6 @@ export default {
       hasErrors: "hasErrors",
       loadedMovies: "loadedMovies",
     }),
-  },
-  mounted() {
-    document.getElementById("movieList").scrollIntoView({ behavior: "smooth" });
   },
 };
 </script>
