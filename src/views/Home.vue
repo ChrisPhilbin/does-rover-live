@@ -2,8 +2,6 @@
   <div>
     <MainSearch />
 
-    <!-- <Information /> -->
-
     <ShowMovieList />
 
     <!-- <Footer /> -->

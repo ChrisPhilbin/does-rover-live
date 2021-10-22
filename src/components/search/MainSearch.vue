@@ -19,10 +19,7 @@
       >
         <p class="font-bold text-white font-sans">No results found</p>
       </div>
-      <div v-if="loadingMovies">
-        <p class="text-white font-bold text-xl">Getting movies...</p>
-      </div>
-      <div class="mt-16">
+      <div class="pt-16">
         <p class="font-title text-white text-2xl">
           Find out or let others know if the dog in the movie makes it.
         </p>
