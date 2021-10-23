@@ -28,8 +28,10 @@ export default createStore({
     hasErrors: (state) => {
       state.errors = true;
     },
-    updateSingleMovie: (state, updatedMovie) => {
-      const index = state.movieTitles.id === updatedMovie.movieId;
+    updateSingleMovie: async (state, updatedMovie) => {
+      const index = await state.movieTitles.findIndex((movie) => {
+        movie.id === parseInt(updatedMovie.movieId);
+      });
       if (index === -1) {
         throw new Error("Something went wrong!");
       } else {
