@@ -28,6 +28,16 @@ export default createStore({
     hasErrors: (state) => {
       state.errors = true;
     },
+    updateSingleMovie: (state, updatedMovie) => {
+      const index = state.movieTitles.id === updatedMovie.movieId;
+      if (index === -1) {
+        throw new Error("Something went wrong!");
+      } else {
+        console.log(updatedMovie, "response from updateVotes via vuex store");
+        state.movieTitles[index] = updatedMovie;
+        console.log(state.movieTitles, "movie titles after update");
+      }
+    },
   },
   actions: {
     async fetchMovies({ commit }, movieTitle) {
@@ -88,6 +98,29 @@ export default createStore({
         }
       } catch (error) {
         commit("hasErrors");
+      }
+    },
+    async updateVoteCounts({ commit }, { movieId, vote }) {
+      let response = await fetch(
+        `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${movieId}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ vote: vote }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      let data = await response.json();
+      if (response.ok) {
+        commit("updateSingleMovie", data);
+        // const index = this.state.movieTitles.id === data.movieId;
+        // if (index === -1) {
+        //   throw new Error("Something went wrong!");
+        // } else {
+        //   console.log(data, "response from updateVotes via vuex store");
+        //   this.state.movieTitles[index] = data;
+        // }
       }
     },
   },

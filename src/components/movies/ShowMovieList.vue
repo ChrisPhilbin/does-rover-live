@@ -144,6 +144,7 @@
 </template>
 
 <script>
+import store from "@/store/index";
 import { mapState } from "vuex";
 export default {
   name: "ShowMovieList",
@@ -159,20 +160,24 @@ export default {
     }),
   },
   methods: {
-    async updateVote(movieId, vote) {
-      let response = await fetch(
-        `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${movieId}`,
-        {
-          method: "PUT",
-          body: JSON.stringify({ vote: vote }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.ok) {
-        console.log("Response submitted!");
-      }
+    // async updateVote(movieId, vote) {
+    //   let response = await fetch(
+    //     `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${movieId}`,
+    //     {
+    //       method: "PUT",
+    //       body: JSON.stringify({ vote: vote }),
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     }
+    //   );
+    //   let data = await response.json();
+    //   if (response.ok) {
+    //     console.log(data);
+    //   }
+    // },
+    updateVote(movieId, vote) {
+      store.dispatch("updateVoteCounts", { movieId, vote });
     },
   },
   updated() {
