@@ -71,6 +71,7 @@
                 hover:text-green-600
                 cursor-pointer
               "
+              @click="updateVote(movie.id, true)"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -90,6 +91,7 @@
                 hover:text-red-600
                 cursor-pointer
               "
+              @click="updateVote(movie.id, false)"
               viewBox="0 0 20 20"
               fill="currentColor"
             >
@@ -155,6 +157,23 @@ export default {
       loadedMovies: "loadedMovies",
       movieTitle: "movieTitle",
     }),
+  },
+  methods: {
+    async updateVote(movieId, vote) {
+      let response = await fetch(
+        `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${movieId}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ vote: vote }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        console.log("Response submitted!");
+      }
+    },
   },
   updated() {
     if (this.loadedMovies) {

@@ -27,12 +27,24 @@ exports.findOrCreateMovie = async (request, response) => {
 };
 
 exports.incrementVoteCount = async (request, response) => {
-  const document = db.collection("movies").doc(`${request.params.movieId}`);
-  console.log(document);
-  if (request.body.vote) {
-    //increment lives count by one
-  } else {
-    //increment dies count by one
+  if (typeof request.body.vote !== "boolean") {
+    //prevent put requests being made without a vote
+    return response.status(400).json({ message: "Must contain valid vote." });
   }
-  //save document back to DB and send response with updated counts
+  db.collection("movies")
+    .where("movieId", "==", request.params.movieId)
+    .limit(1)
+    .get()
+    .then((query) => {
+      const movie = query.docs[0];
+      let tmp = movie.data();
+      request.body.vote
+        ? //true === rover lives!
+          //false === rover dies!
+          (tmp.dogLives = tmp.dogLives + 1)
+        : (tmp.dogDies = tmp.dogDies + 1);
+      movie.ref.update(tmp);
+    });
+  return response.status(200).json({ message: "Updated movie." });
 };
+//save document back to DB and send response with updated counts
