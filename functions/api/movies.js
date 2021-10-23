@@ -36,15 +36,18 @@ exports.incrementVoteCount = async (request, response) => {
     .limit(1)
     .get()
     .then((query) => {
+      if (query.empty) {
+        return response.status(400).json({ error: "Movie not found." });
+      }
       const movie = query.docs[0];
-      let tmp = movie.data();
+      let updatedMovie = movie.data();
       request.body.vote
         ? //true === rover lives!
           //false === rover dies!
-          (tmp.dogLives = tmp.dogLives + 1)
-        : (tmp.dogDies = tmp.dogDies + 1);
-      movie.ref.update(tmp);
+          (updatedMovie.dogLives = updatedMovie.dogLives + 1)
+        : (updatedMovie.dogDies = updatedMovie.dogDies + 1);
+      movie.ref.update(updatedMovie);
+      return response.status(200).json(updatedMovie);
     });
-  return response.status(200).json({ message: "Updated movie." });
 };
 //save document back to DB and send response with updated counts
