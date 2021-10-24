@@ -28,16 +28,18 @@ export default createStore({
     hasErrors: (state) => {
       state.errors = true;
     },
-    updateSingleMovie: async (state, updatedMovie) => {
-      const index = await state.movieTitles.findIndex((movie) => {
-        movie.id === parseInt(updatedMovie.movieId);
+    updateSingleMovie: (state, updatedMovie) => {
+      let index = state.movieTitles.findIndex((movie) => {
+        return movie.id == updatedMovie.movieId;
       });
       if (index === -1) {
         throw new Error("Something went wrong!");
       } else {
-        console.log(updatedMovie, "response from updateVotes via vuex store");
-        state.movieTitles[index] = updatedMovie;
-        console.log(state.movieTitles, "movie titles after update");
+        state.movieTitles[index] = {
+          ...state.movieTitles[index],
+          dogLives: updatedMovie.dogLives,
+          dogDies: updatedMovie.dogDies,
+        };
       }
     },
   },
@@ -78,7 +80,6 @@ export default createStore({
               data.results[movieIndex].dogDies = d.dogDies;
             }
           });
-          console.log(data.results);
           commit("setMovies", data.results);
           commit("loadingMovies");
           commit("setLoadedMovies");

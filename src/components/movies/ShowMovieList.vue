@@ -149,7 +149,9 @@ import { mapState } from "vuex";
 export default {
   name: "ShowMovieList",
   data() {
-    return {};
+    return {
+      voteCast: false,
+    };
   },
   computed: {
     ...mapState({
@@ -177,11 +179,12 @@ export default {
     //   }
     // },
     updateVote(movieId, vote) {
+      this.voteCast = true;
       store.dispatch("updateVoteCounts", { movieId, vote });
     },
   },
   updated() {
-    if (this.loadedMovies) {
+    if (this.loadedMovies && !this.voteCast) {
       const el = document.getElementById("movieList");
       el.scrollIntoView({ behavior: "smooth" });
     }
