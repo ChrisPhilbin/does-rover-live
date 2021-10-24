@@ -150,7 +150,6 @@ export default {
   name: "ShowMovieList",
   data() {
     return {
-      voteCast: false,
     };
   },
   computed: {
@@ -159,6 +158,7 @@ export default {
       hasErrors: "hasErrors",
       loadedMovies: "loadedMovies",
       movieTitle: "movieTitle",
+      voteCast: "voteCast"
     }),
   },
   methods: {
@@ -179,7 +179,6 @@ export default {
     //   }
     // },
     updateVote(movieId, vote) {
-      this.voteCast = true;
       store.dispatch("updateVoteCounts", { movieId, vote });
     },
   },

@@ -5,6 +5,7 @@ export default createStore({
     loadingMovies: false,
     movieDetails: {},
     loadedMovies: false,
+    voteCast: false,
     movieTitles: [],
     movieTitle: "",
     errors: true,
@@ -28,6 +29,9 @@ export default createStore({
     hasErrors: (state) => {
       state.errors = true;
     },
+    setVoteCast: (state, val) => {
+      state.voteCast = val
+    },
     updateSingleMovie: (state, updatedMovie) => {
       let index = state.movieTitles.findIndex((movie) => {
         return movie.id == updatedMovie.movieId;
@@ -46,6 +50,7 @@ export default createStore({
   actions: {
     async fetchMovies({ commit }, movieTitle) {
       commit("loadingMovies");
+      commit("setVoteCast", false);
       if (this.state.loadedMovies) {
         console.log(this.state.loadedMovies, "loadedMovies from vuex");
         commit("setMovies", []);
@@ -104,6 +109,7 @@ export default createStore({
       }
     },
     async updateVoteCounts({ commit }, { movieId, vote }) {
+      commit("setVoteCast", true)
       let response = await fetch(
         `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${movieId}`,
         {
