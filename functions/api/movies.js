@@ -1,3 +1,5 @@
+require("dotenv").config();
+const fetch = require("node-fetch");
 const { db } = require("../util/admin");
 
 exports.findOrCreateMovie = async (request, response) => {
@@ -50,4 +52,49 @@ exports.incrementVoteCount = async (request, response) => {
       return response.status(200).json(updatedMovie);
     });
 };
-//save document back to DB and send response with updated counts
+
+exports.searchMovies = async (request, response) => {
+  if (request.body.movieTitle === "") {
+    return response.status(400).json({ error: "Movie title cannot be blank." });
+  }
+  try {
+    let response = await fetch(
+      `https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_MOVIE_API}&language=en-US&query=${request.body.movieTitle}&page=1&include_adult=false`
+    );
+    let data = await response.json();
+    if (response.ok) {
+      let promisesURL = [];
+      data.results.forEach((result) => {
+        promisesURL.push(
+          `https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${result.id}`
+        );
+      });
+      let dogData = await Promise.all(
+        promisesURL.map(async (url) => {
+          const response = await fetch(url, {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+          const responseData = await response.json();
+          return responseData;
+        })
+      );
+      dogData.forEach((d) => {
+        let movieIndex = data.results.findIndex(
+          (movie) => movie.id == parseInt(d.movieId)
+        );
+        if (movieIndex !== -1) {
+          data.results[movieIndex].dogLives = d.dogLives;
+          data.results[movieIndex].dogDies = d.dogDies;
+        }
+      });
+      return response.status(200).json(data.results);
+      //why isn't above return statement running and below catch block always runs?
+    }
+  } catch (error) {
+    return response.status(400).json({ error: error });
+  }
+};

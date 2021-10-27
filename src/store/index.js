@@ -30,7 +30,7 @@ export default createStore({
       state.errors = true;
     },
     setVoteCast: (state, val) => {
-      state.voteCast = val
+      state.voteCast = val;
     },
     updateSingleMovie: (state, updatedMovie) => {
       let index = state.movieTitles.findIndex((movie) => {
@@ -43,6 +43,7 @@ export default createStore({
           ...state.movieTitles[index],
           dogLives: updatedMovie.dogLives,
           dogDies: updatedMovie.dogDies,
+          voted: true,
         };
       }
     },
@@ -109,7 +110,7 @@ export default createStore({
       }
     },
     async updateVoteCounts({ commit }, { movieId, vote }) {
-      commit("setVoteCast", true)
+      commit("setVoteCast", true);
       let response = await fetch(
         `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${movieId}`,
         {
