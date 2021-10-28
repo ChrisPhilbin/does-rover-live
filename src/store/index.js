@@ -17,7 +17,7 @@ export default createStore({
     setLoadedMovies: (state) => {
       state.loadedMovies = !state.loadedMovies;
     },
-    setMovies: (state, movies) => {
+    setMovies: (state, movies = []) => {
       state.movieTitles = movies;
     },
     setMovieDetails: (state, movieDetails) => {
@@ -53,40 +53,26 @@ export default createStore({
       commit("loadingMovies");
       commit("setVoteCast", false);
       if (this.state.loadedMovies) {
-        console.log(this.state.loadedMovies, "loadedMovies from vuex");
-        commit("setMovies", []);
+        commit("setMovies");
         commit("setLoadedMovies");
+        //issue when user enters string that returns no results and then attempts to perform another search
+        //right after the first one fails
       }
       commit("setMovieTitle", movieTitle);
       try {
         let response = await fetch(
-          `https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_MOVIE_API}&language=en-US&query=${movieTitle}&page=1&include_adult=false`
+          `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/search`,
+          {
+            method: "POST",
+            body: JSON.stringify({ movieTitle: movieTitle }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
         let data = await response.json();
         if (response.ok) {
-          let promises = [];
-          data.results.forEach((result) => {
-            promises.push(
-              `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${result.id}`
-            );
-          });
-          let dogData = await Promise.all(
-            promises.map(async (url) => {
-              const response = await fetch(url);
-              const responseData = await response.json();
-              return responseData;
-            })
-          );
-          dogData.forEach((d) => {
-            let movieIndex = data.results.findIndex(
-              (movie) => movie.id == parseInt(d.movieId)
-            );
-            if (movieIndex !== -1) {
-              data.results[movieIndex].dogLives = d.dogLives;
-              data.results[movieIndex].dogDies = d.dogDies;
-            }
-          });
-          commit("setMovies", data.results);
+          commit("setMovies", data);
           commit("loadingMovies");
           commit("setLoadedMovies");
         }
@@ -124,13 +110,6 @@ export default createStore({
       let data = await response.json();
       if (response.ok) {
         commit("updateSingleMovie", data);
-        // const index = this.state.movieTitles.id === data.movieId;
-        // if (index === -1) {
-        //   throw new Error("Something went wrong!");
-        // } else {
-        //   console.log(data, "response from updateVotes via vuex store");
-        //   this.state.movieTitles[index] = data;
-        // }
       }
     },
   },
