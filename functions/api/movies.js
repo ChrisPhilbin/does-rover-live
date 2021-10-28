@@ -58,11 +58,11 @@ exports.searchMovies = async (request, response) => {
     return response.status(400).json({ error: "Movie title cannot be blank." });
   }
   try {
-    let response = await fetch(
+    let movieResponse = await fetch(
       `https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_MOVIE_API}&language=en-US&query=${request.body.movieTitle}&page=1&include_adult=false`
     );
-    let data = await response.json();
-    if (response.ok) {
+    let data = await movieResponse.json();
+    if (movieResponse.ok) {
       let promisesURL = [];
       data.results.forEach((result) => {
         promisesURL.push(
@@ -73,7 +73,7 @@ exports.searchMovies = async (request, response) => {
         promisesURL.map(async (url) => {
           const response = await fetch(url, {
             method: "GET",
-            mode: "cors",
+            mode: "no-cors",
             headers: {
               "Content-Type": "application/json",
             },
@@ -92,7 +92,6 @@ exports.searchMovies = async (request, response) => {
         }
       });
       return response.status(200).json(data.results);
-      //why isn't above return statement running and below catch block always runs?
     }
   } catch (error) {
     return response.status(400).json({ error: error });
