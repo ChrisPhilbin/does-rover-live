@@ -46,8 +46,8 @@
             :src="`https://www.themoviedb.org/t/p/w220_and_h330_face${movie.poster_path}`"
             class="rounded-md mb-2 opacity-80 h-auto w-full"
           />
-          <div class="relative pt-1">
-            <div class="overflow-hidden text-xs flex rounded bg-purple-200">
+          <div class="relative pt-1 mb-1">
+            <div class="overflow-hidden text-xs flex rounded bg-green-200">
               <div
                 :style="{
                   width:
@@ -62,15 +62,17 @@
                   whitespace-nowrap
                   text-white
                   justify-center
-                  bg-purple-500
+                  bg-green-500
+                  py-1
+                  px-1
                 "
               >
-                &nbsp;
+                {{ movie.dogLives }}
               </div>
             </div>
           </div>
           <div class="relative pt-1">
-            <div class="overflow-hidden text-xs flex rounded bg-purple-200">
+            <div class="overflow-hidden text-xs flex rounded bg-red-200">
               <div
                 :style="{
                   width:
@@ -85,10 +87,12 @@
                   whitespace-nowrap
                   text-white
                   justify-center
-                  bg-purple-500
+                  bg-red-500
+                  py-1
+                  px-1
                 "
               >
-                &nbsp;
+                {{ movie.dogDies }}
               </div>
             </div>
           </div>
