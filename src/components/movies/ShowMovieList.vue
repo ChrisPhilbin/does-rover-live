@@ -1,5 +1,5 @@
 <template>
-  <div
+  <!-- <div
     v-if="loadedMovies && !movieTitles.length"
     class="
       grid grid-cols-1
@@ -12,7 +12,7 @@
     "
   >
     <p class="text-red-500 font-bold">No results found!</p>
-  </div>
+  </div> -->
   <div
     v-if="loadedMovies && movieTitles.length"
     id="movieList"

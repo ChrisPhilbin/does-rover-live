@@ -17,7 +17,7 @@ export default createStore({
     setLoadedMovies: (state) => {
       state.loadedMovies = !state.loadedMovies;
     },
-    setMovies: (state, movies = []) => {
+    setMovies: (state, movies) => {
       state.movieTitles = movies;
     },
     setMovieDetails: (state, movieDetails) => {
@@ -53,7 +53,7 @@ export default createStore({
       commit("loadingMovies");
       commit("setVoteCast", false);
       if (this.state.loadedMovies) {
-        commit("setMovies");
+        commit("setMovies", []);
         commit("setLoadedMovies");
         //issue when user enters string that returns no results and then attempts to perform another search
         //right after the first one fails

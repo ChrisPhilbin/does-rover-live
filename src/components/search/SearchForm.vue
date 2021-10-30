@@ -80,6 +80,11 @@ export default {
       store.dispatch("fetchMovies", this.movieTitle);
     },
   },
-  updated() {},
+  updated() {
+    console.log(
+      this.loadingMovies,
+      "loading movies value from SearchForm component"
+    );
+  },
 };
 </script>
