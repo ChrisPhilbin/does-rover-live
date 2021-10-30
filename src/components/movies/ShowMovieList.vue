@@ -46,6 +46,52 @@
             :src="`https://www.themoviedb.org/t/p/w220_and_h330_face${movie.poster_path}`"
             class="rounded-md mb-2 opacity-80 h-auto w-full"
           />
+          <div class="relative pt-1">
+            <div class="overflow-hidden text-xs flex rounded bg-purple-200">
+              <div
+                :style="{
+                  width:
+                    Math.round(
+                      (movie.dogLives / (movie.dogLives + movie.dogDies)) * 100
+                    ) + '%',
+                }"
+                class="
+                  shadow-none
+                  flex flex-col
+                  text-center
+                  whitespace-nowrap
+                  text-white
+                  justify-center
+                  bg-purple-500
+                "
+              >
+                &nbsp;
+              </div>
+            </div>
+          </div>
+          <div class="relative pt-1">
+            <div class="overflow-hidden text-xs flex rounded bg-purple-200">
+              <div
+                :style="{
+                  width:
+                    Math.round(
+                      (movie.dogDies / (movie.dogLives + movie.dogDies)) * 100
+                    ) + '%',
+                }"
+                class="
+                  shadow-none
+                  flex flex-col
+                  text-center
+                  whitespace-nowrap
+                  text-white
+                  justify-center
+                  bg-purple-500
+                "
+              >
+                &nbsp;
+              </div>
+            </div>
+          </div>
           <div class="text-center">
             <span
               v-if="movie.dogLives > movie.dogDies"
