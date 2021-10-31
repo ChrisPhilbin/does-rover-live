@@ -1,18 +1,4 @@
 <template>
-  <!-- <div
-    v-if="loadedMovies && !movieTitles.length"
-    class="
-      grid grid-cols-1
-      lg:grid-cols-3
-      justify-items-center
-      ml-auto
-      mr-auto
-      pt-4
-      max-w-5xl
-    "
-  >
-    <p class="text-red-500 font-bold">No results found!</p>
-  </div> -->
   <div
     v-if="loadedMovies && movieTitles.length"
     id="movieList"
@@ -96,7 +82,7 @@
               </div>
             </div>
           </div>
-          <div class="text-center">
+          <div class="text-center mt-1">
             <span
               v-if="movie.dogLives > movie.dogDies"
               class="block uppercase text-green-600 font-bold"
@@ -110,46 +96,68 @@
             <span v-else class="block uppercase text-gray-600 font-bold"
               >Not enough data</span
             >
+
             <span v-if="!movie.voted" class="block">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
+              <button
                 class="
-                  h-14
-                  w-14
-                  mr-2
-                  inline
-                  text-yellow-400
-                  hover:text-green-600
-                  cursor-pointer
+                  bg-green-200
+                  hover:bg-green-500
+                  text-gray-800
+                  py-2
+                  px-4
+                  rounded-l
+                  inline-block
                 "
                 @click="updateVote(movie.id, true)"
-                viewBox="0 0 20 20"
-                fill="currentColor"
               >
-                <path
-                  d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"
-                />
-              </svg>
-
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
+                <p class="font-bold text-sm">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 inline text-sm"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    /></svg
+                  >Cast Vote
+                </p>
+                <p>Rover Lives</p>
+              </button>
+              <button
                 class="
-                  h-14
-                  w-14
-                  ml-2
-                  inline
-                  text-yellow-400
-                  hover:text-red-600
-                  cursor-pointer
+                  bg-red-200
+                  hover:bg-red-500
+                  text-gray-800
+                  py-2
+                  px-4
+                  rounded-r
+                  inline-block
                 "
                 @click="updateVote(movie.id, false)"
-                viewBox="0 0 20 20"
-                fill="currentColor"
               >
-                <path
-                  d="M18 9.5a1.5 1.5 0 11-3 0v-6a1.5 1.5 0 013 0v6zM14 9.667v-5.43a2 2 0 00-1.105-1.79l-.05-.025A4 4 0 0011.055 2H5.64a2 2 0 00-1.962 1.608l-1.2 6A2 2 0 004.44 12H8v4a2 2 0 002 2 1 1 0 001-1v-.667a4 4 0 01.8-2.4l1.4-1.866a4 4 0 00.8-2.4z"
-                />
-              </svg>
+                <p class="font-bold text-sm">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 inline text-sm"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    /></svg
+                  >Cast Vote
+                </p>
+                <p>Rover Dies</p>
+              </button>
             </span>
           </div>
         </div>
@@ -213,22 +221,6 @@ export default {
     }),
   },
   methods: {
-    // async updateVote(movieId, vote) {
-    //   let response = await fetch(
-    //     `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${movieId}`,
-    //     {
-    //       method: "PUT",
-    //       body: JSON.stringify({ vote: vote }),
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   );
-    //   let data = await response.json();
-    //   if (response.ok) {
-    //     console.log(data);
-    //   }
-    // },
     updateVote(movieId, vote) {
       store.dispatch("updateVoteCounts", { movieId, vote });
     },
