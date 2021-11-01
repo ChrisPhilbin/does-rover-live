@@ -77,6 +77,7 @@ export default {
   },
   methods: {
     getMovies() {
+      console.log("getting movies...");
       store.dispatch("fetchMovies", this.movieTitle);
     },
   },
