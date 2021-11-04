@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import store from "@/store/index";
 import { mapState } from "vuex";
 import MovieDescription from "./description/MovieDescription.vue";
 import VoteControls from "./vote/VoteControls.vue";
@@ -59,11 +58,6 @@ export default {
       movieTitle: "movieTitle",
       voteCast: "voteCast",
     }),
-  },
-  methods: {
-    updateVote(movieId, vote) {
-      store.dispatch("updateVoteCounts", { movieId, vote });
-    },
   },
   updated() {
     this.$nextTick(() => {
