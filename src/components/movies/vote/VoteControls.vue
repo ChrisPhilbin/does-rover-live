@@ -66,6 +66,7 @@
 
     <span v-if="!movie.voted" class="block">
       <button
+        :disabled="clicked.includes(movie.id)"
         class="
           bg-green-200
           hover:bg-green-500
@@ -96,6 +97,7 @@
         <p>Rover Lives</p>
       </button>
       <button
+        :disabled="clicked.includes(movie.id)"
         class="
           bg-red-200
           hover:bg-red-500
@@ -152,10 +154,13 @@ export default {
   name: "VoteControls",
   props: ["movie"],
   data() {
-    return {};
+    return {
+      clicked: [],
+    };
   },
   methods: {
     updateVote(movieId, vote) {
+      this.clicked.push(movieId);
       store.dispatch("updateVoteCounts", { movieId, vote });
     },
   },
