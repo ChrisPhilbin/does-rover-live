@@ -55,8 +55,6 @@ export default createStore({
       if (this.state.loadedMovies) {
         commit("setMovies", []);
         commit("setLoadedMovies");
-        //issue when user enters string that returns no results and then attempts to perform another search
-        //right after the first one fails
       }
       commit("setMovieTitle", movieTitle);
       try {

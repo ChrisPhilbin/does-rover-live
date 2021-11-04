@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="loadedMovies && movieTitles.length"
+    v-if="loadedMovies && movieTitles.length > 0"
     id="movieList"
     ref="movies"
     class="
@@ -66,10 +66,12 @@ export default {
     },
   },
   updated() {
-    if (this.loadedMovies && !this.voteCast) {
-      const el = document.getElementById("movieList");
-      el.scrollIntoView({ behavior: "smooth" });
-    }
+    this.$nextTick(() => {
+      if (this.loadedMovies && !this.voteCast && this.movieTitles.length) {
+        const el = document.getElementById("movieList");
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    });
   },
 };
 </script>

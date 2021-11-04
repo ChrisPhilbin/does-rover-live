@@ -77,15 +77,9 @@ export default {
   },
   methods: {
     getMovies() {
-      console.log("getting movies...");
       store.dispatch("fetchMovies", this.movieTitle);
     },
   },
-  updated() {
-    console.log(
-      this.loadingMovies,
-      "loading movies value from SearchForm component"
-    );
-  },
+  updated() {},
 };
 </script>
