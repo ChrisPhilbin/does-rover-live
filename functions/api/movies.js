@@ -69,11 +69,12 @@ exports.searchMovies = async (request, response) => {
           timesSearched: 1,
         };
         db.collection("searches").add(newSearchTerm);
+      } else {
+        const searchTerm = query.docs[0];
+        let updatedSearchTerm = searchTerm.data();
+        updatedSearchTerm.timesSearched += 1;
+        searchTerm.ref.update(updatedSearchTerm);
       }
-      const searchTerm = query.docs[0];
-      let updatedSearchTerm = searchTerm.data();
-      updatedSearchTerm.timesSearched += 1;
-      searchTerm.ref.update(updatedSearchTerm);
     });
   try {
     let movieResponse = await fetch(
