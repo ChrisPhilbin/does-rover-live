@@ -55,10 +55,9 @@ exports.incrementVoteCount = async (request, response) => {
 
 exports.searchMovies = async (request, response) => {
   const movieTitle = request.body.movieTitle.toLowerCase();
-  if (request.body.movieTitle === "") {
+  if (movieTitle === "") {
     return response.status(400).json({ error: "Movie title cannot be blank." });
   }
-  console.log(request.body.movieTitle, "movie Title");
   db.collection("searches")
     .where("movieTitle", "==", movieTitle)
     .limit(1)
@@ -78,7 +77,7 @@ exports.searchMovies = async (request, response) => {
     });
   try {
     let movieResponse = await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_MOVIE_API}&language=en-US&query=${request.body.movieTitle}&page=1&include_adult=false`
+      `https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_MOVIE_API}&language=en-US&query=${movieTitle}&page=1&include_adult=false`
     );
     let data = await movieResponse.json();
     if (movieResponse.ok) {
