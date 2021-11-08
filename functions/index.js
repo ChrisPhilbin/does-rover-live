@@ -5,7 +5,10 @@ const {
   findOrCreateMovie,
   incrementVoteCount,
   searchMovies,
+  trendingMovies,
 } = require("./api/movies");
+
+app.get("/movies/trending", trendingMovies);
 
 app.get("/movies/:movieId", findOrCreateMovie);
 

@@ -116,3 +116,23 @@ exports.searchMovies = async (request, response) => {
     return response.status(400).json({ error: error });
   }
 };
+
+exports.trendingMovies = async (request, response) => {
+  const searchesRef = await db.collection("searches");
+  const trendingSnapshot = await searchesRef
+    .orderBy("timesSearched", "desc")
+    .limit(5)
+    .get();
+
+  if (trendingSnapshot.empty) {
+    return response.status(400).json({ error: "Something went wrong." });
+  }
+
+  let trendingTitles = [];
+
+  trendingSnapshot.forEach((doc) => {
+    trendingTitles.push(doc.data());
+  });
+
+  return response.status(200).json(trendingTitles);
+};
