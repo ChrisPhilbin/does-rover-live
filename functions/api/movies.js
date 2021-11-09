@@ -130,7 +130,7 @@ exports.trendingMovies = async (request, response) => {
 
   let trendingTitles = [];
 
-  trendingSnapshot.forEach((doc) => {
+  trendingSnapshot.forEach(async (doc) => {
     trendingTitles.push(doc.data());
   });
 
