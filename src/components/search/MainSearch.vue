@@ -14,9 +14,15 @@
       </p>
       <SearchForm />
       <div v-if="trendingTitles.length" class="mt-3">
-        <p class="inline text-lg font-bold text-white italic whitespace-pre">Trending:   </p>
-        <li v-for="title in trendingTitles" :key="title.movieTitle" class="inline capitalize text-white whitespace-pre">
-          {{title.movieTitle + "   "}}
+        <p class="text-lg font-bold text-white italic whitespace-pre">
+          Trending:
+        </p>
+        <li
+          v-for="title in trendingTitles"
+          :key="title.movieTitle"
+          class="inline capitalize text-white text-sm whitespace-pre"
+        >
+          {{ title.movieTitle + "   " }}
         </li>
       </div>
       <div
@@ -54,7 +60,7 @@ export default {
       movieTitles: "movieTitles",
       loadedMovies: "loadedMovies",
       loadingTrending: "loadingTrending",
-      trendingTitles: "trendingTitles"
+      trendingTitles: "trendingTitles",
     }),
   },
   methods: {},
