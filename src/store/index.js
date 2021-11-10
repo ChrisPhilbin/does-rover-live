@@ -3,6 +3,8 @@ import { createStore } from "vuex";
 export default createStore({
   state: {
     loadingMovies: false,
+    loadingTrending: false,
+    trendingTitles: [],
     movieDetails: {},
     loadedMovies: false,
     voteCast: false,
@@ -13,6 +15,12 @@ export default createStore({
   mutations: {
     loadingMovies: (state) => {
       state.loadingMovies = !state.loadingMovies;
+    },
+    loadingTrending: (state) => {
+      state.loadingTrending = !state.loadingTrending;
+    },
+    setTrendingTitles: (state, trendingTitles) => {
+      state.trendingTitles = trendingTitles
     },
     setLoadedMovies: (state) => {
       state.loadedMovies = !state.loadedMovies;
@@ -49,6 +57,20 @@ export default createStore({
     },
   },
   actions: {
+    async fetchTrending({ commit }) {
+      commit("loadingTrending");
+      try {
+        let response = await fetch("https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/trending")
+        let data = await response.json();
+        if (response.ok) {
+          commit("setTrendingTitles", data)
+          commit("loadingTrending");
+        }
+      } catch(error) {
+        commit("hasErrors");
+        commit("loadingTrending");
+      }
+    },
     async fetchMovies({ commit }, movieTitle) {
       commit("loadingMovies");
       commit("setVoteCast", false);
@@ -73,21 +95,6 @@ export default createStore({
           commit("setMovies", data);
           commit("loadingMovies");
           commit("setLoadedMovies");
-        }
-      } catch (error) {
-        commit("hasErrors");
-      }
-    },
-    async fetchSingleMovie({ commit }, movieId) {
-      commit("loadingMovies");
-      try {
-        let response = await fetch(
-          `https://api.themoviedb.org/3/movie/${movieId}?api_key=${process.env.VUE_APP_MOVIE_API}&language=en-US`
-        );
-        let data = await response.json();
-        if (response.ok) {
-          commit("setMovieDetails", data);
-          commit("loadingMovies");
         }
       } catch (error) {
         commit("hasErrors");
