@@ -84,6 +84,7 @@ export default createStore({
           `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/search`,
           {
             method: "POST",
+            mode: "cors",
             body: JSON.stringify({ movieTitle: movieTitle }),
             headers: {
               "Content-Type": "application/json",

@@ -13,6 +13,12 @@
         Does Rover Live?
       </p>
       <SearchForm />
+      <div v-if="trendingTitles.length" class="mt-3">
+        <p class="inline text-lg font-bold text-white italic whitespace-pre">Trending:   </p>
+        <li v-for="title in trendingTitles" :key="title.movieTitle" class="inline capitalize text-white whitespace-pre">
+          {{title.movieTitle + "   "}}
+        </li>
+      </div>
       <div
         v-if="loadedMovies && movieTitles.length === 0"
         class="mt-3 bg-red-400 rounded-md p-4 w-48 opacity-80 ml-auto mr-auto"
@@ -29,6 +35,7 @@
 </template>
 
 <script>
+import store from "@/store/index";
 import { mapState } from "vuex";
 import SearchForm from "./SearchForm.vue";
 
@@ -38,11 +45,16 @@ export default {
   data() {
     return {};
   },
+  mounted() {
+    store.dispatch("fetchTrending");
+  },
   computed: {
     ...mapState({
       loadingMovies: "loadingMovies",
       movieTitles: "movieTitles",
       loadedMovies: "loadedMovies",
+      loadingTrending: "loadingTrending",
+      trendingTitles: "trendingTitles"
     }),
   },
   methods: {},
