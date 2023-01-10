@@ -1,12 +1,11 @@
 require("dotenv").config();
 const fetch = require("node-fetch");
 const { db } = require("../util/admin");
+const { theMovieDbApiKey } = require("../util/movie-db-config");
 
 exports.findOrCreateMovie = async (request, response) => {
   const moviesRef = await db.collection("movies");
-  const moviesSnapshot = await moviesRef
-    .where("movieId", "==", request.params.movieId)
-    .get();
+  const moviesSnapshot = await moviesRef.where("movieId", "==", request.params.movieId).get();
   if (moviesSnapshot.empty) {
     const newMovie = {
       movieId: request.params.movieId,
@@ -78,15 +77,13 @@ exports.searchMovies = async (request, response) => {
     });
   try {
     let movieResponse = await fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=${process.env.VUE_APP_MOVIE_API}&language=en-US&query=${movieTitle}&page=1&include_adult=false`
+      `https://api.themoviedb.org/3/search/movie?api_key=${theMovieDbApiKey}&language=en-US&query=${movieTitle}&page=1&include_adult=false`
     );
     let data = await movieResponse.json();
     if (movieResponse.ok) {
       let promisesURL = [];
       data.results.forEach((result) => {
-        promisesURL.push(
-          `https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${result.id}`
-        );
+        promisesURL.push(`https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${result.id}`);
       });
       let dogData = await Promise.all(
         promisesURL.map(async (url) => {
@@ -102,9 +99,7 @@ exports.searchMovies = async (request, response) => {
         })
       );
       dogData.forEach((d) => {
-        let movieIndex = data.results.findIndex(
-          (movie) => movie.id == parseInt(d.movieId)
-        );
+        let movieIndex = data.results.findIndex((movie) => movie.id == parseInt(d.movieId));
         if (movieIndex !== -1) {
           data.results[movieIndex].dogLives = d.dogLives;
           data.results[movieIndex].dogDies = d.dogDies;
@@ -119,10 +114,7 @@ exports.searchMovies = async (request, response) => {
 
 exports.trendingMovies = async (request, response) => {
   const searchesRef = await db.collection("searches");
-  const trendingSnapshot = await searchesRef
-    .orderBy("timesSearched", "desc")
-    .limit(5)
-    .get();
+  const trendingSnapshot = await searchesRef.orderBy("timesSearched", "desc").limit(5).get();
 
   if (trendingSnapshot.empty) {
     return response.status(400).json({ error: "Something went wrong." });

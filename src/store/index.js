@@ -20,7 +20,7 @@ export default createStore({
       state.loadingTrending = !state.loadingTrending;
     },
     setTrendingTitles: (state, trendingTitles) => {
-      state.trendingTitles = trendingTitles
+      state.trendingTitles = trendingTitles;
     },
     setLoadedMovies: (state) => {
       state.loadedMovies = !state.loadedMovies;
@@ -60,13 +60,13 @@ export default createStore({
     async fetchTrending({ commit }) {
       commit("loadingTrending");
       try {
-        let response = await fetch("https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/trending")
+        let response = await fetch("https://us-central1-does-rover-live.cloudfunctions.net/api/movies/trending");
         let data = await response.json();
         if (response.ok) {
-          commit("setTrendingTitles", data)
+          commit("setTrendingTitles", data);
           commit("loadingTrending");
         }
-      } catch(error) {
+      } catch (error) {
         commit("hasErrors");
         commit("loadingTrending");
       }
@@ -80,17 +80,14 @@ export default createStore({
       }
       commit("setMovieTitle", movieTitle);
       try {
-        let response = await fetch(
-          `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/search`,
-          {
-            method: "POST",
-            mode: "cors",
-            body: JSON.stringify({ movieTitle: movieTitle }),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        let response = await fetch(`https://us-central1-does-rover-live.cloudfunctions.net/api/movies/search`, {
+          method: "POST",
+          mode: "cors",
+          body: JSON.stringify({ movieTitle: movieTitle }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
         let data = await response.json();
         if (response.ok) {
           commit("setMovies", data);
@@ -103,16 +100,13 @@ export default createStore({
     },
     async updateVoteCounts({ commit }, { movieId, vote }) {
       commit("setVoteCast", true);
-      let response = await fetch(
-        `https://immense-headland-94271.herokuapp.com/https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${movieId}`,
-        {
-          method: "PUT",
-          body: JSON.stringify({ vote: vote }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      let response = await fetch(`https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${movieId}`, {
+        method: "PUT",
+        body: JSON.stringify({ vote: vote }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       let data = await response.json();
       if (response.ok) {
         commit("updateSingleMovie", data);
