@@ -2,6 +2,9 @@ require("dotenv").config();
 const fetch = require("node-fetch");
 const { db } = require("../util/admin");
 const { theMovieDbApiKey } = require("../util/movie-db-config");
+const { of, Observable } = require("rxjs");
+const { switchMap, catchError } = require("rxjs/operators");
+const { fromFetch } = require("rxjs/fetch");
 
 exports.findOrCreateMovie = async (request, response) => {
   const moviesRef = await db.collection("movies");
@@ -76,28 +79,58 @@ exports.searchMovies = async (request, response) => {
       }
     });
   try {
+    // const movieResponseData$ = new Observable((observer) => {
+    //   fetch(
+    //     `https://api.themoviedb.org/3/search/movie?api_key=${theMovieDbApiKey}&language=en-US&query=${movieTitle}&page=1&include_adult=false`
+    //   )
+    //     .then((response) => response.json())
+    //     .then((responseData) => {
+    //       observer.next(response.status(200).json(responseData));
+    //       observer.complete();
+    //     })
+    //     .catch((error) =>
+    //       observer.error(response.status(400).json({ error: "Could not connect to the movie database" }))
+    //     );
+    // });
+
+    // movieResponseData$.subscribe((data) => {
+    //   return data;
+    // });
+
     let movieResponse = await fetch(
       `https://api.themoviedb.org/3/search/movie?api_key=${theMovieDbApiKey}&language=en-US&query=${movieTitle}&page=1&include_adult=false`
     );
     let data = await movieResponse.json();
     if (movieResponse.ok) {
-      let promisesURL = [];
-      data.results.forEach((result) => {
-        promisesURL.push(`https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${result.id}`);
+      let dogData = [];
+      let moviesCollectionRef = db.collection("movies");
+      const moviePromises = data.results.map(({ id }) => {
+        return moviesCollectionRef.where("movieId", "==", id).limit(1).get();
       });
-      let dogData = await Promise.all(
-        promisesURL.map(async (url) => {
-          const response = await fetch(url, {
-            method: "GET",
-            mode: "no-cors",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-          const responseData = await response.json();
-          return responseData;
-        })
-      );
+      Promise.all(moviePromises).then((allQuerySnapshots) => {
+        allQuerySnapshots.forEach((querySnapshot) => {
+          console.log(querySnapshot);
+        });
+      });
+      return response.status(200);
+      // let promisesURL = [];
+      // data.results.forEach((result) => {
+      //   promisesURL.push(`https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${result.id}`);
+      // });
+      // let dogData = await Promise.all(
+      //   promisesURL.map(async (url) => {
+      //     const response = await fetch(url, {
+      //       method: "GET",
+      //       mode: "no-cors",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //       },
+      //     });
+      //     const responseData = await response.json();
+      //     return responseData;
+      //   })
+      // );
+      console.log(dogData, "dog data collection");
       dogData.forEach((d) => {
         let movieIndex = data.results.findIndex((movie) => movie.id == parseInt(d.movieId));
         if (movieIndex !== -1) {
@@ -105,6 +138,7 @@ exports.searchMovies = async (request, response) => {
           data.results[movieIndex].dogDies = d.dogDies;
         }
       });
+      console.log(data.results, "data results");
       return response.status(200).json(data.results);
     }
   } catch (error) {
