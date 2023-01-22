@@ -7,6 +7,7 @@ const { switchMap, catchError } = require("rxjs/operators");
 const { fromFetch } = require("rxjs/fetch");
 
 exports.findOrCreateMovie = async (request, response) => {
+  console.log(typeof request.params.movieId, "type of params");
   const moviesRef = await db.collection("movies");
   const moviesSnapshot = await moviesRef.where("movieId", "==", request.params.movieId).get();
   if (moviesSnapshot.empty) {
@@ -24,6 +25,9 @@ exports.findOrCreateMovie = async (request, response) => {
         return response.status(200).json(responseMovie);
       });
   }
+  //movieSnaoshot => returns a QuerySnapshot
+  //movieSnapshot.forEach => provides access to each document... QueryDocumentSnapshot
+  console.log(moviesSnapshot, "single query snapshot");
   moviesSnapshot.forEach((doc) => {
     let movieData = doc.data();
     return response.status(200).json(movieData);
@@ -105,14 +109,16 @@ exports.searchMovies = async (request, response) => {
       let dogData = [];
       let moviesCollectionRef = db.collection("movies");
       const moviePromises = data.results.map(({ id }) => {
-        return moviesCollectionRef.where("movieId", "==", id).limit(1).get();
+        return moviesCollectionRef.where("movieId", "==", id.toString()).limit(1).get();
       });
       Promise.all(moviePromises).then((allQuerySnapshots) => {
-        allQuerySnapshots.forEach((querySnapshot) => {
-          console.log(querySnapshot);
+        allQuerySnapshots.forEach((singleQuerySnapshot) => {
+          singleQuerySnapshot.forEach((doc) => {
+            dogData.push(doc.data());
+          });
         });
       });
-      return response.status(200);
+      // return response.status(200).json(movies);
       // let promisesURL = [];
       // data.results.forEach((result) => {
       //   promisesURL.push(`https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${result.id}`);
