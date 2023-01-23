@@ -7,7 +7,6 @@ const { switchMap, catchError } = require("rxjs/operators");
 const { fromFetch } = require("rxjs/fetch");
 
 exports.findOrCreateMovie = async (request, response) => {
-  console.log(typeof request.params.movieId, "type of params");
   const moviesRef = await db.collection("movies");
   const moviesSnapshot = await moviesRef.where("movieId", "==", request.params.movieId).get();
   if (moviesSnapshot.empty) {
@@ -27,7 +26,6 @@ exports.findOrCreateMovie = async (request, response) => {
   }
   //movieSnaoshot => returns a QuerySnapshot
   //movieSnapshot.forEach => provides access to each document... QueryDocumentSnapshot
-  console.log(moviesSnapshot, "single query snapshot");
   moviesSnapshot.forEach((doc) => {
     let movieData = doc.data();
     return response.status(200).json(movieData);
@@ -113,39 +111,36 @@ exports.searchMovies = async (request, response) => {
       });
       Promise.all(moviePromises).then((allQuerySnapshots) => {
         allQuerySnapshots.forEach((singleQuerySnapshot) => {
+          console.log(singleQuerySnapshot, "singleQuerySnapshot");
+          // if (singleQuerySnapshot.empty){
+          // const newMovie = {
+          // need to identify movieId from given querySnapshot in order to create the entry if it doesn't already exist
+          //   movieId: movieId,
+          //   dogLives: 0,
+          //   dogDies: 0,
+          // };
+
+          // db.collection("movies")
+          //   .add(newMovie)
+          //   .then((doc) => {
+          //     const responseMovie = newMovie;
+          //     responseMovie.id = doc.id;
+          //     dogData.push(responseMovie);
+          //   });
+          // }
           singleQuerySnapshot.forEach((doc) => {
             dogData.push(doc.data());
           });
         });
+        dogData.forEach((d) => {
+          let movieIndex = data.results.findIndex((movie) => movie.id == parseInt(d.movieId));
+          if (movieIndex !== -1) {
+            data.results[movieIndex].dogLives = d.dogLives;
+            data.results[movieIndex].dogDies = d.dogDies;
+          }
+        });
+        return response.status(200).json(data.results);
       });
-      // return response.status(200).json(movies);
-      // let promisesURL = [];
-      // data.results.forEach((result) => {
-      //   promisesURL.push(`https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${result.id}`);
-      // });
-      // let dogData = await Promise.all(
-      //   promisesURL.map(async (url) => {
-      //     const response = await fetch(url, {
-      //       method: "GET",
-      //       mode: "no-cors",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //       },
-      //     });
-      //     const responseData = await response.json();
-      //     return responseData;
-      //   })
-      // );
-      console.log(dogData, "dog data collection");
-      dogData.forEach((d) => {
-        let movieIndex = data.results.findIndex((movie) => movie.id == parseInt(d.movieId));
-        if (movieIndex !== -1) {
-          data.results[movieIndex].dogLives = d.dogLives;
-          data.results[movieIndex].dogDies = d.dogDies;
-        }
-      });
-      console.log(data.results, "data results");
-      return response.status(200).json(data.results);
     }
   } catch (error) {
     return response.status(400).json({ error: error });
