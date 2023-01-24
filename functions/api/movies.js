@@ -107,30 +107,34 @@ exports.searchMovies = async (request, response) => {
       let dogData = [];
       let moviesCollectionRef = db.collection("movies");
       const moviePromises = data.results.map(({ id }) => {
-        return moviesCollectionRef.where("movieId", "==", id.toString()).limit(1).get();
+        return moviesCollectionRef
+          .where("movieId", "==", id.toString())
+          .limit(1)
+          .get()
+          .then((movieQuerySnapshot) => {
+            if (movieQuerySnapshot.empty) {
+              const newMovie = {
+                movieId: id,
+                dogLives: 0,
+                dogDies: 0,
+              };
+
+              return db
+                .collection("movies")
+                .add(newMovie)
+                .then((doc) => {
+                  const responseMovie = newMovie;
+                  responseMovie.id = doc.id;
+                  return responseMovie;
+                });
+            } else {
+              return movieQuerySnapshot.docs[0].data();
+            }
+          });
       });
       Promise.all(moviePromises).then((allQuerySnapshots) => {
-        allQuerySnapshots.forEach((singleQuerySnapshot) => {
-          console.log(singleQuerySnapshot, "singleQuerySnapshot");
-          // if (singleQuerySnapshot.empty){
-          // const newMovie = {
-          // need to identify movieId from given querySnapshot in order to create the entry if it doesn't already exist
-          //   movieId: movieId,
-          //   dogLives: 0,
-          //   dogDies: 0,
-          // };
-
-          // db.collection("movies")
-          //   .add(newMovie)
-          //   .then((doc) => {
-          //     const responseMovie = newMovie;
-          //     responseMovie.id = doc.id;
-          //     dogData.push(responseMovie);
-          //   });
-          // }
-          singleQuerySnapshot.forEach((doc) => {
-            dogData.push(doc.data());
-          });
+        allQuerySnapshots.forEach((movieDocumentSnapshot) => {
+          dogData.push(movieDocumentSnapshot);
         });
         dogData.forEach((d) => {
           let movieIndex = data.results.findIndex((movie) => movie.id == parseInt(d.movieId));
