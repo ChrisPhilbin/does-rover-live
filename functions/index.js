@@ -16,11 +16,9 @@ const limiter = rateLimit({
   max: 10,
 });
 
-const { findOrCreateMovie, incrementVoteCount, searchMovies, trendingMovies } = require("./api/movies");
+const { incrementVoteCount, searchMovies, trendingMovies } = require("./api/movies");
 
 app.get("/movies/trending", trendingMovies);
-
-app.get("/movies/:movieId", findOrCreateMovie);
 
 app.put("/movies/:movieId", limiter, incrementVoteCount);
 
