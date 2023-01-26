@@ -46,17 +46,20 @@ exports.searchMovies = async (request, response) => {
   }
 
   const movieResponseData$ = new Observable((observer) => {
-    fetch(
-      `https://api.themoviedb.org/3/search/movie?api_key=${theMovieDbApiKey}&language=en-US&query=${movieTitle}&page=1&include_adult=false`
-    )
-      .then((response) => response.json())
-      .then((responseData) => {
-        observer.next(responseData);
+    const getMovieData = async () => {
+      try {
+        const movieDatabaseResponse = await fetch(
+          `https://api.themoviedb.org/3/search/movie?api_key=${theMovieDbApiKey}&language=en-US&query=${movieTitle}&page=1&include_adult=false`
+        );
+        const response = await movieDatabaseResponse.json();
+        observer.next(response);
         observer.complete();
-      })
-      .catch((error) => {
+      } catch (error) {
+        console.log(error);
         observer.error(response.status(400).json({ error: "Could not connect to the movie database" }));
-      });
+      }
+    };
+    getMovieData();
   }).subscribe((data) => {
     let dogData = [];
     let moviesCollectionRef = db.collection("movies");
