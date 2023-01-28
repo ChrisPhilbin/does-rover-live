@@ -36,13 +36,11 @@ exports.searchMovies = async (request, response) => {
       timesSearched: 1,
     };
     searchRef.add(newSearchTerm);
-    console.log("Added new search term", newSearchTerm);
   } else {
     const searchTerm = searchQuerySnapshot.docs[0];
     const updatedSearchTerm = searchTerm.data();
     updatedSearchTerm.timesSearched += 1;
     searchTerm.ref.update(updatedSearchTerm);
-    console.log("Finished incrementing search count");
   }
 
   const movieResponseData$ = new Observable((observer) => {
@@ -55,7 +53,6 @@ exports.searchMovies = async (request, response) => {
         observer.next(response);
         observer.complete();
       } catch (error) {
-        console.log(error);
         observer.error(response.status(400).json({ error: "Could not connect to the movie database" }));
       }
     };
@@ -71,7 +68,7 @@ exports.searchMovies = async (request, response) => {
         .then((movieQuerySnapshot) => {
           if (movieQuerySnapshot.empty) {
             const newMovie = {
-              movieId: id,
+              movieId: id.toString(),
               dogLives: 0,
               dogDies: 0,
             };
