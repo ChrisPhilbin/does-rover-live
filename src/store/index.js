@@ -10,7 +10,7 @@ export default createStore({
     voteCast: false,
     movieTitles: [],
     movieTitle: "",
-    errors: true,
+    errors: false,
   },
   mutations: {
     loadingMovies: (state) => {
@@ -34,8 +34,8 @@ export default createStore({
     setMovieTitle: (state, movieTitle) => {
       state.movieTitle = movieTitle;
     },
-    hasErrors: (state) => {
-      state.errors = true;
+    hasErrors: (state, booleanValue) => {
+      state.errors = booleanValue;
     },
     setVoteCast: (state, val) => {
       state.voteCast = val;
@@ -67,7 +67,7 @@ export default createStore({
           commit("loadingTrending");
         }
       } catch (error) {
-        commit("hasErrors");
+        commit("hasErrors", true);
         commit("loadingTrending");
       }
     },
@@ -92,10 +92,17 @@ export default createStore({
         if (response.ok) {
           commit("setMovies", data);
           commit("loadingMovies");
+          commit("hasErrors", false);
           commit("setLoadedMovies");
+        } else if (response.status === 400) {
+          throw new Error("Movie title cannot be blank.");
+        } else {
+          throw new Error("Something went wrong retrieving movies from the database. Please try again.");
         }
       } catch (error) {
-        commit("hasErrors");
+        console.log(error);
+        commit("hasErrors", true);
+        commit("loadingMovies");
       }
     },
     async updateVoteCounts({ commit }, { movieId, vote }) {

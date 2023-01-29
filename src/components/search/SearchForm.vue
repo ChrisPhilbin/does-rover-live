@@ -1,24 +1,15 @@
 <template>
   <form @submit.prevent="getMovies">
     <input
+      required
       type="text"
       name="movieTitle"
       autofocus
       v-model="movieTitle"
-      placeholder="enter movie title"
+      :placeholder="errors ? 'Something went wrong. Try again' : 'Enter movie title'"
       size="30"
-      class="
-        focus:outline-none
-        shadow-lg
-        border
-        rounded-lg
-        py-2
-        px-3
-        text-gray-800
-        mt-12
-        ml-auto
-        mr-auto
-      "
+      class="focus:outline-none rounded-lg py-2 px-3 mt-12 ml-auto mr-auto"
+      :class="{ 'border-4 border-red-600 placeholder:text-red-600': errors }"
     />
     <svg
       v-if="!loadingMovies"
@@ -42,14 +33,7 @@
       viewBox="0 0 24 24"
       fill="none"
     >
-      <circle
-        class="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        stroke-width="4"
-      ></circle>
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
       <path
         class="opacity-75"
         fill="currentColor"
@@ -73,11 +57,14 @@ export default {
   computed: {
     ...mapState({
       loadingMovies: "loadingMovies",
+      errors: "errors",
     }),
   },
   methods: {
     getMovies() {
+      // if (this.movieTitle.length) {
       store.dispatch("fetchMovies", this.movieTitle);
+      // }
     },
   },
   updated() {},
