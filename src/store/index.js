@@ -60,7 +60,9 @@ export default createStore({
     async fetchTrending({ commit }) {
       commit("loadingTrending");
       try {
-        let response = await fetch("https://us-central1-does-rover-live.cloudfunctions.net/api/movies/trending");
+        let response = await fetch(
+          "https://us-central1-does-rover-live.cloudfunctions.net/api/movies/trending"
+        );
         let data = await response.json();
         if (response.ok) {
           commit("setTrendingTitles", data);
@@ -80,14 +82,17 @@ export default createStore({
       }
       commit("setMovieTitle", movieTitle);
       try {
-        let response = await fetch(`https://us-central1-does-rover-live.cloudfunctions.net/api/movies/search`, {
-          method: "POST",
-          mode: "cors",
-          body: JSON.stringify({ movieTitle: movieTitle }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        let response = await fetch(
+          `https://us-central1-does-rover-live.cloudfunctions.net/api/movies/search`,
+          {
+            method: "POST",
+            mode: "cors",
+            body: JSON.stringify({ movieTitle: movieTitle }),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         let data = await response.json();
         if (response.ok) {
           commit("setMovies", data);
@@ -97,7 +102,9 @@ export default createStore({
         } else if (response.status === 400) {
           throw new Error("Movie title cannot be blank.");
         } else {
-          throw new Error("Something went wrong retrieving movies from the database. Please try again.");
+          throw new Error(
+            "Something went wrong retrieving movies from the database. Please try again."
+          );
         }
       } catch (error) {
         console.log(error);
@@ -107,13 +114,16 @@ export default createStore({
     },
     async updateVoteCounts({ commit }, { movieId, vote }) {
       commit("setVoteCast", true);
-      let response = await fetch(`https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${movieId}`, {
-        method: "PUT",
-        body: JSON.stringify({ vote: vote }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      let response = await fetch(
+        `https://us-central1-does-rover-live.cloudfunctions.net/api/movies/${movieId}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ vote: vote }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       let data = await response.json();
       if (response.ok) {
         commit("updateSingleMovie", data);
