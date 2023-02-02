@@ -1,22 +1,10 @@
 <template>
   <div class="grid grid-cols-1 ml-auto mr-auto min-h-screen">
-    <div
-      class="
-        pt-20
-        relative
-        h-screen
-        xs:h-full
-        bg-search-background bg-no-repeat bg-cover bg-opacity-60
-      "
-    >
-      <p class="mt-20 font-title font-bold text-white text-6xl tracking-wide">
-        Does Rover Live?
-      </p>
+    <div class="pt-20 relative h-screen xs:h-full bg-search-background bg-no-repeat bg-cover bg-opacity-60">
+      <p class="mt-20 font-title font-bold text-white text-6xl tracking-wide">Does Rover Live?</p>
       <SearchForm />
       <div v-if="trendingTitles.length" class="mt-3">
-        <p class="text-lg font-bold text-white italic whitespace-pre">
-          Trending:
-        </p>
+        <p class="text-lg font-bold text-white italic whitespace-pre">Trending:</p>
         <li
           v-for="title in trendingTitles"
           :key="title.movieTitle"
@@ -32,9 +20,7 @@
         <p class="font-bold text-white font-sans">No results found</p>
       </div>
       <div class="pt-16">
-        <p class="font-title text-white text-2xl">
-          Find out or let others know if the dog in the movie makes it.
-        </p>
+        <p class="font-title text-white text-2xl">Find out or let others know if the dog in the movie makes it.</p>
       </div>
     </div>
   </div>
