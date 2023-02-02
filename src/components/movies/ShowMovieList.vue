@@ -3,17 +3,7 @@
     v-if="loadedMovies && movieTitles.length > 0"
     id="movieList"
     ref="movies"
-    class="
-      min-h-screen
-      grid grid-cols-1
-      lg:grid-cols-3
-      justify-items-center
-      ml-auto
-      mr-auto
-      pt-4
-      max-w-5xl
-      relative
-    "
+    class="min-h-screen grid grid-cols-1 lg:grid-cols-3 justify-items-center ml-auto mr-auto pt-4 max-w-5xl relative"
   >
     <div class="col-span-1 lg:col-span-3 absolute top-3 left-6">
       <p class="uppercase text-gray-600 text-sm font-bold mb-5">
@@ -27,11 +17,13 @@
       :class="{ hidden: !movie.poster_path || !movie.overview }"
     >
       <div class="flex items-center justify-center">
-        <div class="z-10">
-          <img
-            :src="`https://www.themoviedb.org/t/p/w220_and_h330_face${movie.poster_path}`"
-            class="rounded-md mb-2 opacity-80 h-auto w-full"
-          />
+        <div class="">
+          <div class="placeholder ml-auto mr-auto mb-2">
+            <img
+              :src="`https://www.themoviedb.org/t/p/w220_and_h330_face${movie.poster_path}`"
+              class="rounded-md mb-2 h-auto w-full z-50"
+            />
+          </div>
           <VoteControls :movie="movie" />
         </div>
       </div>
@@ -69,3 +61,13 @@ export default {
   },
 };
 </script>
+
+<style>
+.placeholder {
+  width: 220px;
+  height: 330px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("/img/movie-reel.png");
+}
+</style>
